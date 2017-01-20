@@ -13,4 +13,4 @@ var UserSchema = new Schema({
     {versionKey: false}
 );
 
-module.exports = mongoose.model('Item', UserSchema);
+module.exports = mongoose.model('User', UserSchema);
