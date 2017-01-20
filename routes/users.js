@@ -15,6 +15,18 @@ router.get('/users', function(req, res, next){
         });
 });
 
+// Get single user
+router.get('/users/:id', function(req, res, next) {
+  var _id = req.params.id;
+  User.findById(_id, function(err, data) {
+    if (err) {
+      res.send(err);
+    } else {
+      res.json(data);
+    }
+  });
+});
+
 // Add new user
 router.post('/users', function(req, res, next){
     var user = {
@@ -37,4 +49,23 @@ router.post('/users', function(req, res, next){
     });
 });
 
+// Update user
+router.put('/users/:id', function(req, res, next) {
+  var _id = req.params.id;
+  User.findById(_id, function(err, data) {
+    if (err) {
+      res.send(err);
+    } else {
+      data.device_uuid = req.body.device_uuid;
+      data.level = req.body.level;
+      data.strength = req.body.strength;
+      data.strength_growth = req.body.strength_growth;
+      data.click_count = req.body.click_count;
+      data.money_spent = req.body.money_spent;
+      data.time_on_gym = req.body.time_on_gym;
+      data.save();
+      res.status(200).json(data);
+    }
+  });
+});
 module.exports = router;
