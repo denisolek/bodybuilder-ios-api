@@ -10,18 +10,22 @@ mongoose.connect(db);
 // Get all users
 router.get('/users', function(req, res, next){
     User.find()
+        .sort({strength: 'desc'})
         .then(function(data){
             res.json(data);
         });
 });
 
 // Get single user
-router.get('/users/:id', function(req, res, next) {
-  var _id = req.params.id;
-  User.findById(_id, function(err, data) {
+router.get('/users/:uuid', function(req, res, next) {
+  var device_uuid = req.params.uuid;
+  User.findOne({ 'device_uuid': device_uuid }, function(err, data) {
     if (err) {
       res.send(err);
     } else {
+      if (data == null) {
+        return res.sendStatus(404);
+      }
       res.json(data);
     }
   });
@@ -33,10 +37,7 @@ router.post('/users', function(req, res, next){
       device_uuid: req.body.device_uuid,
       level: req.body.level,
       strength: req.body.strength,
-      strength_growth: req.body.strength_growth,
-      click_count: req.body.click_count,
-      money_spent: req.body.money_spent,
-      time_on_gym: req.body.time_on_gym
+      nickname: req.body.nickname
     };
 
     var data = new User(user);
@@ -59,10 +60,7 @@ router.put('/users/:id', function(req, res, next) {
       data.device_uuid = req.body.device_uuid;
       data.level = req.body.level;
       data.strength = req.body.strength;
-      data.strength_growth = req.body.strength_growth;
-      data.click_count = req.body.click_count;
-      data.money_spent = req.body.money_spent;
-      data.time_on_gym = req.body.time_on_gym;
+      data.nickname = req.body.nickname
       data.save();
       res.status(200).json(data);
     }
