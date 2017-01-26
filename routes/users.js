@@ -51,9 +51,9 @@ router.post('/users', function(req, res, next){
 });
 
 // Update user
-router.put('/users/:id', function(req, res, next) {
-  var _id = req.params.id;
-  User.findById(_id, function(err, data) {
+router.put('/users/:uuid', function(req, res, next) {
+  var device_uuid = req.params.uuid;
+  User.findOne({ 'device_uuid': device_uuid }, function(err, data) {
     if (err) {
       res.send(err);
     } else {
